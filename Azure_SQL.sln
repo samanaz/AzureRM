@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Azure_SQL", "Azure_SQL\Azure_SQL.deployproj", "{AE94F4A2-9374-4FA9-9277-DB7E12DBA6F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE94F4A2-9374-4FA9-9277-DB7E12DBA6F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE94F4A2-9374-4FA9-9277-DB7E12DBA6F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE94F4A2-9374-4FA9-9277-DB7E12DBA6F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE94F4A2-9374-4FA9-9277-DB7E12DBA6F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F6F0F11-A1EE-406E-8D13-7370EC1E64AB}
+	EndGlobalSection
+EndGlobal
