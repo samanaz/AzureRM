@@ -26,9 +26,8 @@
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SQL_Temps\" />
+    <None Include="SQL_Temps\azuresql.json" />
+    <None Include="SQL_Temps\azuresql.parameters.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>
