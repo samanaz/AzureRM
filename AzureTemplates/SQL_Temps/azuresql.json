@@ -2,11 +2,52 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "samantestsqlAdminLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "samantestsqlAdminLoginPassword": {
+      "type": "securestring"
+    }
+    
+
   },
   "variables": {
+    "samantestsqlName": "[concat('samantestsql', uniqueString(resourceGroup().id))]"
+    
   },
   "resources": [
+    {
+      "name": "[variables('samantestsqlName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "samantestsql"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('samantestsqlAdminLogin')]",
+        "administratorLoginPassword": "[parameters('samantestsqlAdminLoginPassword')]"
+      },
+      "resources": [
+        {
+          "name": "AllowAllWindowsAzureIps",
+          "type": "firewallrules",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('samantestsqlName'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    }
+    
   ],
-  "outputs": {
-  }
-}
+        "outputs": {
+        }
+      }
