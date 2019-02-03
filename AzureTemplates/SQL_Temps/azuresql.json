@@ -2,52 +2,395 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "samantestsqlAdminLogin": {
-      "type": "string",
-      "minLength": 1
-    },
-    "samantestsqlAdminLoginPassword": {
-      "type": "securestring"
-    }
-    
-
+   
   },
   "variables": {
-    "samantestsqlName": "[concat('samantestsql', uniqueString(resourceGroup().id))]"
-    
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+    "serverInName": "sql_server_",
+    "dataBaseInName": "db_",
+    "servers_samansql_name": "[toLower(concat(variables('serverInName') ,concat(variables('suffix'))))]",
+    "databases_saman_name": "[toLower(concat(variables('dataBaseInName'), concat(variables('suffix'))))]",
+    "advisors_DropIndex_name": "DropIndex",
+    "firewallRules_Local_name": "Local",
+    "keys_ServiceManaged_name": "ServiceManaged",
+    "advisors_CreateIndex_name": "CreateIndex",
+    "advisors_DefragmentIndex_name": "DefragmentIndex",
+    "auditingPolicies_Default_name": "Default",
+    "advisors_ForceLastGoodPlan_name": "ForceLastGoodPlan",
+    "advisors_DbParameterization_name": "DbParameterization",
+    "encryptionProtector_current_name": "current",
+    "advisors_DropIndex_name_1": "DropIndex",
+    "advisors_CreateIndex_name_1": "CreateIndex",
+    "firewallRules_AllowAllWindowsAzureIps_name": "AllowAllWindowsAzureIps",
+    "advisors_DefragmentIndex_name_1": "DefragmentIndex",
+    "auditingPolicies_Default_name_1": "Default",
+    "auditingPolicies_Default_name_2": "Default",
+    "databases_master_name": "master",
+    "geoBackupPolicies_Default_name": "Default",
+    "geoBackupPolicies_Default_name_1": "Default",
+    "advisors_ForceLastGoodPlan_name_1": "ForceLastGoodPlan",
+    "advisors_DbParameterization_name_1": "DbParameterization",
+    "transparentDataEncryption_current_name": "current",
+    "transparentDataEncryption_current_name_1": "current"
   },
+  
   "resources": [
     {
-      "name": "[variables('samantestsqlName')]",
       "type": "Microsoft.Sql/servers",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2014-04-01-preview",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "samantestsql"
-      },
+      "kind": "v12.0",
+      "name": "[variables('servers_samansql_name')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "australiaeast",
+      "scale": null,
       "properties": {
-        "administratorLogin": "[parameters('samantestsqlAdminLogin')]",
-        "administratorLoginPassword": "[parameters('samantestsqlAdminLoginPassword')]"
+        "administratorLogin": "samanadmin",
+        "version": "12.0"
       },
-      "resources": [
-        {
-          "name": "AllowAllWindowsAzureIps",
-          "type": "firewallrules",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2014-04-01-preview",
-          "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', variables('samantestsqlName'))]"
-          ],
-          "properties": {
-            "startIpAddress": "0.0.0.0",
-            "endIpAddress": "0.0.0.0"
-          }
-        }
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Sql/servers/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('advisors_CreateIndex_name'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('advisors_DropIndex_name'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('advisors_DbParameterization_name'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('advisors_DefragmentIndex_name'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('advisors_ForceLastGoodPlan_name'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/auditingPolicies",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('auditingPolicies_Default_name'))]",
+      "apiVersion": "2014-04-01",
+      "location": "Australia East",
+      "scale": null,
+      "properties": {
+        "auditingState": "New",
+        "eventTypesToAudit": "PlainSQL_Success,PlainSQL_Failure,ParameterizedSQL_Success,ParameterizedSQL_Failure,StoredProcedure_Success,StoredProcedure_Failure,Login_Success,Login_Failure,TransactionManagement_Success,TransactionManagement_Failure",
+        "storageAccountName": null,
+        "storageAccountKey": null,
+        "storageAccountSecondaryKey": null,
+        "storageTableEndpoint": null,
+        "storageAccountResourceGroupName": null,
+        "storageAccountSubscriptionId": null,
+        "fullAuditLogsTableName": "SQLDBAuditLogsSamansql",
+        "auditLogsTableName": "Samansql",
+        "retentionDays": "0"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases",
+      "sku": {
+        "name": "S0",
+        "tier": "Standard"
+      },
+      "kind": "v12.0,user",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'))]",
+      "apiVersion": "2017-03-01-preview",
+      "location": "australiaeast",
+      "scale": null,
+      "properties": {
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "maxSizeBytes": 1073741824,
+        "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "zoneRedundant": false
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('firewallRules_AllowAllWindowsAzureIps_name'))]",
+      "apiVersion": "2015-05-01-preview",
+      "scale": null,
+      "properties": {
+        "startIpAddress": "0.0.0.0",
+        "endIpAddress": "0.0.0.0"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('firewallRules_Local_name'))]",
+      "apiVersion": "2015-05-01-preview",
+      "scale": null,
+      "properties": {
+        "startIpAddress": "14.203.212.49",
+        "endIpAddress": "14.203.212.49"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/encryptionProtector",
+      "kind": "servicemanaged",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('encryptionProtector_current_name'))]",
+      "apiVersion": "2015-05-01-preview",
+      "scale": null,
+      "properties": {
+        "serverKeyName": "ServiceManaged",
+        "serverKeyType": "ServiceManaged"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/keys",
+      "kind": "servicemanaged",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('keys_ServiceManaged_name'))]",
+      "apiVersion": "2015-05-01-preview",
+      "scale": null,
+      "properties": {
+        "serverKeyType": "[variables('keys_ServiceManaged_name')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_master_name'), '/', variables('auditingPolicies_Default_name_2'))]",
+      "apiVersion": "2014-04-01",
+      "location": "Australia East",
+      "scale": null,
+      "properties": {
+        "auditingState": "New",
+        "eventTypesToAudit": "PlainSQL_Success,PlainSQL_Failure,ParameterizedSQL_Success,ParameterizedSQL_Failure,StoredProcedure_Success,StoredProcedure_Failure,Login_Success,Login_Failure,TransactionManagement_Success,TransactionManagement_Failure",
+        "storageAccountName": null,
+        "storageAccountKey": null,
+        "storageAccountSecondaryKey": null,
+        "storageTableEndpoint": null,
+        "storageAccountResourceGroupName": null,
+        "storageAccountSubscriptionId": null,
+        "useServerDefault": "Enabled",
+        "fullAuditLogsTableName": "SQLDBAuditLogsSamansqlMaster",
+        "auditLogsTableName": "SamansqlMaster",
+        "retentionDays": "0"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_master_name'), '/', variables('geoBackupPolicies_Default_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "location": "Australia East",
+      "scale": null,
+      "properties": {
+        "state": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_master_name'), '/', variables('transparentDataEncryption_current_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "location": "Australia East",
+      "scale": null,
+      "properties": {
+        "status": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('advisors_CreateIndex_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('advisors_DropIndex_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('advisors_DbParameterization_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('advisors_DefragmentIndex_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/advisors",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('advisors_ForceLastGoodPlan_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "scale": null,
+      "properties": {
+        "autoExecuteValue": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/auditingPolicies",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('auditingPolicies_Default_name_1'))]",
+      "apiVersion": "2014-04-01",
+      "location": "Australia East",
+      "scale": null,
+      "properties": {
+        "auditingState": "New",
+        "eventTypesToAudit": "PlainSQL_Success,PlainSQL_Failure,ParameterizedSQL_Success,ParameterizedSQL_Failure,StoredProcedure_Success,StoredProcedure_Failure,Login_Success,Login_Failure,TransactionManagement_Success,TransactionManagement_Failure",
+        "storageAccountName": null,
+        "storageAccountKey": null,
+        "storageAccountSecondaryKey": null,
+        "storageTableEndpoint": null,
+        "storageAccountResourceGroupName": null,
+        "storageAccountSubscriptionId": null,
+        "useServerDefault": "Enabled",
+        "fullAuditLogsTableName": "SQLDBAuditLogsSamansqlSaman",
+        "auditLogsTableName": "SamansqlSaman",
+        "retentionDays": "0"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/geoBackupPolicies",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('geoBackupPolicies_Default_name'))]",
+      "apiVersion": "2014-04-01",
+      "location": "Australia East",
+      "scale": null,
+      "properties": {
+        "state": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
+      ]
+    },
+    {
+      
+      "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+      "name": "[concat(variables('servers_samansql_name'), '/', variables('databases_saman_name'), '/', variables('transparentDataEncryption_current_name'))]",
+      "apiVersion": "2014-04-01",
+      "location": "Australia East",
+      "scale": null,
+      "properties": {
+        "status": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('servers_samansql_name'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', variables('servers_samansql_name'), variables('databases_saman_name'))]"
       ]
     }
-    
-  ],
-        "outputs": {
-        }
-      }
+  ]
+}
